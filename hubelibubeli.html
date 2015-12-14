@@ -1,0 +1,82 @@
+<!DOCUMENT html>
+<html>
+<head>
+<title>hubelibubeli</title>
+</head>
+<body>
+<pre>
+Gegeben sei
+bumelibumeli
+hubelibubeli und
+bubaliwubali
+
+Meine Analyse hat ergeben, dass
+die erwähnten Wörter aus sechs Silben bestehen,
+wobei sich die Folge der Umlaute nach drei Silben wiederholt.
+Die Folge der Konsonanten zeigt insofern ein Muster auf, dass
+derjenige in der ersten Silbe, in der vierten wiederholt werden darf.
+Die dritte und sechste Silbe muss mit der Buchstabenfolge li gleich sein.
+Die Abfolge der Umlaute ist entweder u, e und i oder u, a und i, da die Umlaute
+e und a nah verwandt sind.
+Die zweite und fünfte Silbe muss in jedem Falle übereinstimmen.
+
+Sei + der Konkatenationsoperator, 
+A der Konsonant der ersten Silbe,
+B der Konsonant der zweiten Silbe,
+C der Konsonant der vierten Silbe,
+E ein Umlaut, wobei E element von {e,a}
+lässt sich das Muster folgendermassen formal darstellen:
+A+u + B+E + li + C+u + B+E + li
+
+Sei ein Konsonant Element aus {B,D,F,G,H,J,K,L,M,N,P,R,S,T,W,Z},
+haben wir für die Variablen A,B und C je 16 Möglichkeiten, für E 2.
+Aus mathematischer Sicht haben wir also
+16 * 16*2 * 16 = 8192 Möglichkeiten, die diesem Muster entsprechen:
+</pre>
+</body>
+<script type="text/javascript">
+ia = 0
+ib = 0
+ic = 0
+ie = 0
+
+consonants = ['b','d','f','g','h','j','k','l','m','n','p','r','s','t','w','z',]
+
+umlaute = ['e','a']
+
+function printAll() {
+while(true) {
+    var textNode = document.createTextNode(word());
+    var divNode = document.createElement("div");
+    divNode.appendChild(textNode);
+    document.body.appendChild(divNode);
+        word();
+        increment();
+        if(ia > 15) {
+            break;
+        }
+    }}
+    
+    
+function  increment(){    ic++;
+    if(ic > 15) {
+        ic = 0;
+        ie++;
+        if(ie > 1) {
+            ie = 0;
+            ib++;
+            if(ib > 15) {
+                ib = 0;
+                ia++;
+                if(ia > 15) {
+                   
+                }
+            }
+        }
+    }}
+    
+    function word(){return consonants[ia] + 'u' + consonants[ib] + umlaute[ie] + 'li' + consonants[ic] + 'u' + consonants[ib] + umlaute[ie] + 'li';}
+    
+    printAll();
+</script>
+</html>
