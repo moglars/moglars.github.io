@@ -1,0 +1,88 @@
+<! DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>asonTrainer</title>
+</head>
+<body style="font-family:sans-serif">
+<div id="message" style="min-height:20px"></div>
+<textarea rows="30" cols="50" id="ason" wrap="off">-
+ key value
+ .arrayKey
+  value
+  42
+  true
+  null
+  -
+   anonymous object
+  .
+   array in array</textarea>
+<textarea rows="30" cols="50" id="json" readonly wrap="off"></textarea>
+<textarea rows="30" cols="50" id="tokens" readonly wrap="off"></textarea>
+<input type="checkbox" id="strict"> strict mode 
+<p>Open console with F12. Type in asonObject. Use ason.parse() and ason.stringify().
+</body>
+<script type="text/javascript" >var exports = {};</script>
+<script type="text/javascript" src="ASON.js" ></script>
+<script type="text/javascript" >var ason = exports;exports = {};</script>
+
+<script type="text/javascript">
+var waiter;
+
+var textNode = document.createTextNode('');
+document.getElementById('message').appendChild(textNode);
+
+var convert = function() {
+    try {
+        var strict = document.getElementById('strict').checked;
+        var asonArea = document.getElementById('ason');
+        var asonStr = asonArea.value;
+        var shiftTokens = ason.shiftTokenizer(asonStr,strict);
+        var asonTokens = ason.asonTokenizer(shiftTokens,strict);
+        var jsonStr = ason.generateJSON (asonTokens,true);
+        var jsonArea = document.getElementById('json');
+        jsonArea.value = jsonStr;
+        asonArea.addEventListener('scroll', function(e) {
+            jsonArea.scrollTop = asonArea.scrollTop;
+        });
+        asonObject = ason.parse(asonStr);
+        var tokensAsAson = ason.stringify(asonTokens);
+        var tokensArea = document.getElementById('tokens');
+        tokensArea.value = tokensAsAson;
+        tokensArea.scrollTop = tokensArea.scrollHeight - tokensArea.clientHeight;
+
+        textNode.textContent = '';
+        document.getElementById('ason').style.backgroundColor = "rgb(227, 227, 254)";
+    } catch(e) {
+        textNode.textContent = e;
+        document.getElementById('ason').style.backgroundColor = "rgb(255, 233, 233)";
+    }
+    
+}
+
+document.getElementById('strict').onclick = convert;
+
+document.onkeydown = function(event) {
+    clearTimeout(waiter);
+    waiter = null;
+    if(event.keyCode === 13) {
+        var asonTextArea = document.getElementById('ason');
+        var text = asonTextArea.value;
+        var indent = text.slice(text.lastIndexOf("\n",asonTextArea.selectionStart-1)+1).match(/^\ */)[0];
+        var before = text.slice(0,asonTextArea.selectionStart);
+        var after = text.slice(asonTextArea.selectionStart);
+        document.getElementById('ason').value = before + "\n" + indent + after;
+        asonTextArea.selectionStart = asonTextArea.selectionEnd = before.length + 1 + indent.length;
+        convert();
+        return false;
+    } else {
+        waiter = setTimeout(function() {
+            convert();
+        },200);
+    }
+    
+};
+
+convert();
+</script>
+</html>
