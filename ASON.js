@@ -155,10 +155,12 @@
     var escapeToJson = function (text, ason) {
         var escapedString = "";
         var specialMapping;
+        var uEscaping;
         if (ason) {
             specialMapping = {
                 "\n": "\\n"
             };
+            uEscaping = /[\u0000-\u001F]/;
         } else {
             //map char to escape sequence
             specialMapping = {
@@ -171,13 +173,14 @@
                 "\r": "\\r",
                 "\t": "\\t"
             };
+            uEscaping = /[\u0000-\u0007\u000B\u000E-\u001F]/;
         }
 
         //not applicable here, but very insightful: https://mathiasbynens.be/notes/javascript-unicode
         text.split('').forEach(function (character) {
             if (specialMapping[character] !== undefined) {
                 escapedString += specialMapping[character];
-            } else if (/[\u0000-\u0007\u000B\u000E-\u001F]/.test(character)) {
+            } else if (uEscaping.test(character)) {
                 var codePoint = character.codePointAt(0);
                 var hex = ("0000" + codePoint.toString(16)).slice(-4);
                 escapedString += "\\u" + hex;
@@ -397,7 +400,7 @@
                 if (strict && content.indexOf("\t") !== -1) {
                     throw "no tabs allowed";
                 }
-                //TODO throw exception if ason tokens contain unescaped special characters: 005C, 0000-001F must be escaped.
+                //TODO throw exception if ason tokens contain unescaped special characters: 0000-001F must be escaped.
                 if (context === 'm') {
                     lookAheadToken = shiftTokens[i + 1];
                     if (lookAheadToken !== undefined && lookAheadToken.type === 'rs') {
@@ -890,7 +893,7 @@
         process.stdout.write(str);
     };
 
-    if (typeof require === 'object' && require.main === module) {
+    if (typeof require === 'function' && require.main === module) {
         var paramIndex = 2;
         var options = process.argv[paramIndex];
         if (options !== undefined && options.substring(0, 1) === "-") {

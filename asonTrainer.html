@@ -21,6 +21,7 @@
 <textarea rows="30" cols="50" id="tokens" readonly wrap="off"></textarea>
 <input type="checkbox" id="strict"> strict mode 
 <p>Open console with F12. Type in asonObject. Use ason.parse() and ason.stringify().
+<p>Paste in json and convert: <input type="text" id="jsonInput"> <input id="jsonInputBtn" type="button" value="convert"></p>
 </body>
 <script type="text/javascript" >var exports = {};</script>
 <script type="text/javascript" src="ASON.js" ></script>
@@ -61,6 +62,11 @@ var convert = function() {
 }
 
 document.getElementById('strict').onclick = convert;
+document.getElementById('jsonInputBtn').onclick = function () {
+    var r = ason.jsonToAson(document.getElementById('jsonInput').value);
+    document.getElementById('ason').value = r;
+    convert();
+};
 
 document.onkeydown = function(event) {
     clearTimeout(waiter);
