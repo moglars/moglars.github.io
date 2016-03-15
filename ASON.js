@@ -724,13 +724,13 @@
             var value = o[key];
             if (Array.isArray(value)) {
                 if (value.length === 0) {
-                    output += "." + escapeToJson(key);
+                    output += "." + escapeToJson(key) + "\n";
                 } else {
                     output += "." + escapeToJson(key) + "\n" + arrayToAson(value, level + 1);
                 }
             } else if (isObject(value)) { //warn: array is also an object
                 if (!hasKeys(value)) {
-                    output += "-" + escapeToJson(key);
+                    output += "-" + escapeToJson(key) + "\n";
                 } else {
                     output += escapeToJson(key) + "\n" + objToAson(value, level + 1);
                 }
