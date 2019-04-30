@@ -823,7 +823,7 @@
                 stack[stack.length - 1].push(tokens[currentIndex].body);
             } else if (tokens[currentIndex].type === 'mk') {
                 o = {};
-                stack[stack.length - 1][tokens[currentIndex].body] = {};
+                stack[stack.length - 1][tokens[currentIndex].body] = o;
                 stack.push(o);
             } else if (tokens[currentIndex].type === 'sk') {
                 a = [];
